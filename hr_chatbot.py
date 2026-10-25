@@ -51,24 +51,26 @@ def pick_sections(question):
 
 
 # ---------------------------------------------------------------- TODO 1: the reusable prompt
-PROMPT_TEMPLATE = """You are an HR assistant. You are the [topic] assistant for [company].
-SOURCES
-Answer only from the approved documents provided. Policy version: [version and date].
-HOW TO ANSWER
-1. Find the section that answers the question.
-2. Answer in plain language in three sentences or fewer and give the section number.
-3. If the documents do not clearly answer the question, say you could not find it and set
-needs_human to true.
-ALWAYS ESCALATE (needs_human = true)
-- Complaints about managers or colleagues, harassment, pay disputes, termination, medical details.
-- Any request for another person's data.
-- Anything that needs a system lookup you do not have, such as a leave balance.
-NEVER
-- Guess a number, date or rule that is not in the documents.
-- Repeat personal identifiers back to the user.
-OUTPUT
-Return only valid JSON with these fields: answer, policy_section, answer_found, needs_human,
-escalation_reason."""
+PROMPT_TEMPLATE = """You are an HR assistant for Meridian, a fictional company.
+
+APPROVED POLICY
+Policy version: {{policy_version}}
+
+{{policy_text}}
+
+EMPLOYEE QUESTION
+{{question}}
+
+INSTRUCTIONS
+1. Answer only using the approved policy text provided above.
+2. Respond in plain language in three sentences or fewer.
+3. Include the relevant policy section number.
+4. If the policy does not answer the question, do not guess.
+5. Escalate sensitive questions or requests requiring information you cannot access.
+
+Return only valid JSON with these five fields:
+answer, policy_section, answer_found, needs_human, escalation_reason.
+"""
 # TODO 1: rewrite PROMPT_TEMPLATE using the Lab 1 instructions and these three placeholders:
 #   {{policy_version}}  {{policy_text}}  {{question}}
 # It must tell the model to answer only from the policy text and to return the five JSON fields.
